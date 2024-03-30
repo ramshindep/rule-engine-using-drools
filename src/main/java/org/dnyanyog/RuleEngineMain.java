@@ -6,30 +6,25 @@ import org.kie.api.runtime.KieSession;
 
 public class RuleEngineMain {
 
-	public static void main(String[] args) {
+  public static void main(String[] args) {
 
-		
-		
-		KieSession kSession = new DroolsBeanFactory().getKieSession(); 
-		if (kSession != null) {
-			
-			
-			Customer customer = new Customer();
-			customer.setAge(20);
-			customer.setGender("M");
-		
-			kSession.insert(customer); 
+    KieSession kSession = new DroolsBeanFactory().getKieSession();
+    if (kSession != null) {
 
-			kSession.fireAllRules();
+      Customer customer = new Customer();
+      customer.setAge(20);
+      customer.setGender("M");
 
-			kSession.dispose();
+      kSession.insert(customer);
 
+      kSession.fireAllRules();
 
-			System.out.println("customer discount: " + customer.getDiscount());
-			
+      kSession.dispose();
 
-		} else {
-			System.err.println("Failed to create KieSession.");
-		}
-	}
+      System.out.println("customer discount: " + customer.getDiscount());
+
+    } else {
+      System.err.println("Failed to create KieSession.");
+    }
+  }
 }

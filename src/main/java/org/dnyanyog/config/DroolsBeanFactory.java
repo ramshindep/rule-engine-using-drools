@@ -2,7 +2,6 @@ package org.dnyanyog.config;
 
 import java.util.Arrays;
 import java.util.List;
-
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieBuilder;
 import org.kie.api.builder.KieFileSystem;
@@ -13,33 +12,29 @@ import org.kie.internal.io.ResourceFactory;
 
 public class DroolsBeanFactory {
 
-    private KieServices kieServices = KieServices.Factory.get();
+  private KieServices kieServices = KieServices.Factory.get();
 
-    public KieSession getKieSession() {
-    	    	
-    	
-        KieBuilder kb = kieServices.newKieBuilder(getKieFileSystem());
-            
-        kb.buildAll(); 
+  public KieSession getKieSession() {
 
-        ReleaseId krDefaultReleaseId = kieServices.getRepository().getDefaultReleaseId();
-        
-        
-        KieContainer kieContainer = kieServices.newKieContainer(krDefaultReleaseId);
+    KieBuilder kb = kieServices.newKieBuilder(getKieFileSystem());
 
-        return kieContainer.newKieSession();
+    kb.buildAll();
+
+    ReleaseId krDefaultReleaseId = kieServices.getRepository().getDefaultReleaseId();
+
+    KieContainer kieContainer = kieServices.newKieContainer(krDefaultReleaseId);
+
+    return kieContainer.newKieSession();
+  }
+
+  private KieFileSystem getKieFileSystem() {
+
+    KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
+    List<String> rules = Arrays.asList("org/dnyanyog/rules/discountRules.drl");
+
+    for (String rule : rules) {
+      kieFileSystem.write(ResourceFactory.newClassPathResource(rule));
     }
-    
-    private KieFileSystem getKieFileSystem() {
-    	
-    	
-        KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
-        List<String> rules = Arrays.asList("org/dnyanyog/rules/discountRules.drl");
-        
-        for (String rule : rules) {
-            kieFileSystem.write(ResourceFactory.newClassPathResource(rule));
-        }
-        return kieFileSystem;
-        
-    }
+    return kieFileSystem;
+  }
 }
